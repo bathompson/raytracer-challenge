@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../util.hpp"
 #include "../Tuple.hpp"
+#include "../Color.hpp"
 
 bool runTupleTest1()
 {
@@ -184,4 +185,35 @@ bool vecCrossTest()
     Tuple b = Tuple::Vector(2,3,4);
 
     return a.cross(b) == Tuple::Vector(-1,2,-1) && b.cross(a) == Tuple::Vector(1,-2,1);
+}
+
+bool colorAddTest()
+{
+    Color c1 = Color(0.9, 0.6, 0.75);
+    Color c2 = Color(0.7, 0.1, 0.25);
+
+    return (c1+c2) == Color(1.6, 0.7, 1.0);
+}
+
+bool colorSubTest()
+{
+    Color c1 = Color(0.9, 0.6, 0.75);
+    Color c2 = Color(0.7, 0.1, 0.25);
+
+    return (c1-c2) == Color(0.2, 0.5, 0.5);
+}
+
+bool colorScalarMultTest()
+{
+    Color c1 = Color(0.2,0.3,0.4);
+    
+    return ((Tuple)c1*2.0) ==Color(0.4,0.6,0.8);
+}
+
+bool colorProductTest()
+{
+    Color c1 = Color(1,0.2,0.4);
+    Color c2 = Color(0.9,1,0.1);
+
+    return (c1*c2) == Color(0.9,0.2,0.04);
 }
