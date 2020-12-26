@@ -1,6 +1,5 @@
 #include "Tuple.hpp"  
 #include "util.hpp"
-#define EPSILON 0.00001
 
 Tuple::Tuple()
 {

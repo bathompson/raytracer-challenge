@@ -2,6 +2,7 @@
 #include "tests/tupleTest.hpp"
 #include "Tuple.hpp"
 #include "tests/canvasTest.hpp"
+#include "tests/matrixTests.hpp"
 
 typedef struct
 {
@@ -15,12 +16,13 @@ typedef struct
     Tuple wind;
 } environment;
 
-bool runTests(bool (*func)());
+bool runTests(bool (*func)(), int i);
 projectile tick(environment&, projectile&);
 
 int main()
 {
-    bool (*func[23])();
+    bool success = true;
+    bool (*func[39])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -44,33 +46,59 @@ int main()
     func[20] = testCreateCanvas;
     func[21] = testWriteCanvas;
     func[22] = testSaveCanvas;
+    func[23] = matrixAccessTest;
+    func[24] = matrixEqualTest;
+    func[25] = matrixInequalityTest;
+    func[26] = matrixMultTest;
+    func[27] = matrixTupleProductTest;
+    func[28] = identityTest;
+    func[29] = tupleIdentity;
+    func[30] = matrixTransposeTest;
+    func[31] = determinant2x2test;
+    func[32] = submatrix3x3Test;
+    func[33] = submatrix4x4Test;
+    func[34] = minorTest3x3;
+    func[35] = cofactorTest3x3;
+    func[36] = determinant3x3Test;
+    func[37] = determinant4x4Test;
+    func[38] = matrixInverseTest;
 
+    int i = 0;
     for(auto& fun : func)
     {
-        runTests(fun);
+        success &= runTests(fun, i);
+        i++;
     }
-
-    Tuple start = Tuple::Point(0,1,0);
-    Tuple vel = Tuple::Vector(1,1.8,0).normalize()*11.25;
-    projectile p = {start,vel};
-
-    Tuple gravity = Tuple::Vector(0,-0.1, 0);
-    Tuple wind = Tuple::Vector(-0.01,0,0);
-    environment e = {gravity, wind};
-    Canvas c = Canvas(900,550);
-
-    while(p.pos.Y() > 0)
+    if(success)
+        std::cout<<"\nTests all completed successfully\n";
+    else
     {
-        int x = static_cast<int>(std::round(p.pos.X()));
-        int y = static_cast<int>(std::round(p.pos.Y()));
-        c[c.Height()-y][x] = Color(1,0,0);
-        p = tick(e, p);
+        std::cout<<"\nAt least one test failed\n";
     }
-    c.save("projectile.ppm");
+    
+
+    // Tuple start = Tuple::Point(0,1,0);
+    // Tuple vel = Tuple::Vector(1,1.8,0).normalize()*11.25;
+    // projectile p = {start,vel};
+
+    // Tuple gravity = Tuple::Vector(0,-0.1, 0);
+    // Tuple wind = Tuple::Vector(-0.01,0,0);
+    // environment e = {gravity, wind};
+    // Canvas c = Canvas(900,550);
+
+    // while(p.pos.Y() > 0)
+    // {
+    //     int x = static_cast<int>(std::round(p.pos.X()));
+    //     int y = static_cast<int>(std::round(p.pos.Y()));
+    //     c[c.Height()-y][x] = Color(1,0,0);
+    //     p = tick(e, p);
+    // }
+    // c.save("projectile.ppm");
 }
 
-bool runTests(bool (*func)())
+bool runTests(bool (*func)(), int i)
 {
+    std::cout<<i<<": ";
     if(!func())
     {
         std::cout << "Tests Failed\n";
