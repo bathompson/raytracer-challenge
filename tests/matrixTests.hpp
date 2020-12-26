@@ -149,7 +149,7 @@ bool determinant3x3Test()
 
 bool determinant4x4Test()
 {
-    double vals[4][4] = {1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4};
+    double vals[4][4] = {-2,-8,3,5,-3,1,7,3,1,2,-9,6,-6,7,7,-9};
     Matrix m = Matrix::Matrix4x4(vals);
 
     return m.cofactor(0,0) == 690 && m.cofactor(0,1) == 447 && m.cofactor(0,2) == 210 && m.cofactor(0,3) == 51 && m.determinant() == -4071;
