@@ -3,6 +3,7 @@
 #include "Tuple.hpp"
 #include "tests/canvasTest.hpp"
 #include "tests/matrixTests.hpp"
+#include "tests/rayTest.hpp"
 
 typedef struct
 {
@@ -47,7 +48,7 @@ void makeClock()
 void batchAllTests()
 {
     bool success = true;
-    bool (*func[58])();
+    bool (*func[59])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -106,6 +107,7 @@ void batchAllTests()
     func[55] = shearTest6;
     func[56] = chainTransformTest1;
     func[57] = chainTransformTest2;
+    func[58] = rayCreateTest;
 
     int i = 0;
     for(auto& fun : func)
