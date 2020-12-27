@@ -16,13 +16,38 @@ typedef struct
     Tuple wind;
 } environment;
 
-bool runTests(bool (*func)(), int i);
+bool runTest(bool (*func)(), int i);
+void batchAllTests();
+void makeClock();
 projectile tick(environment&, projectile&);
 
 int main()
 {
+    batchAllTests();
+    makeClock();
+}
+
+void makeClock()
+{
+    Canvas c = Canvas(600,600);
+    Tuple ref = Tuple::Point(0,0,1);
+    double changeBy = M_PI/6;
+    double r = 3/8.0*c.Width();
+    for(int i = 0; i<12; i++)
+    {
+        Matrix t = Matrix::RotateY(changeBy*i);
+        Tuple place = t*ref;
+        int x = static_cast<int>(std::round(place.X()*r + 300));
+        int y = static_cast<int>(std::round(place.Z()*r + 300));
+        c[y][x]=Color(1,1,1);
+    }
+    c.save("clock.ppm");
+}
+
+void batchAllTests()
+{
     bool success = true;
-    bool (*func[39])();
+    bool (*func[58])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -62,21 +87,32 @@ int main()
     func[36] = determinant3x3Test;
     func[37] = determinant4x4Test;
     func[38] = matrixInverseTest;
+    func[39] = translationTest1;
+    func[40] = translationTest2;
+    func[41] = translateVectorTest;
+    func[42] = scaleTest1;
+    func[43] = scaleTest2;
+    func[44] = scaleTest3;
+    func[45] = reflectionTest;
+    func[46] = xRotationTest;
+    func[47] = xInvRotationTest;
+    func[48] = yRotationTest;
+    func[49] = zRotationTest;
+    func[50] = shearTest1;
+    func[51] = shearTest2;
+    func[52] = shearTest3;
+    func[53] = shearTest4;
+    func[54] = shearTest5;
+    func[55] = shearTest6;
+    func[56] = chainTransformTest1;
+    func[57] = chainTransformTest2;
 
     int i = 0;
     for(auto& fun : func)
     {
-        success &= runTests(fun, i);
+        success &= runTest(fun, i);
         i++;
     }
-    if(success)
-        std::cout<<"\nTests all completed successfully\n";
-    else
-    {
-        std::cout<<"\nAt least one test failed\n";
-    }
-    
-
     // Tuple start = Tuple::Point(0,1,0);
     // Tuple vel = Tuple::Vector(1,1.8,0).normalize()*11.25;
     // projectile p = {start,vel};
@@ -94,19 +130,25 @@ int main()
     //     p = tick(e, p);
     // }
     // c.save("projectile.ppm");
+    if(success)
+        std::cout<<"\nAll tests completed successfully\n";
+    else
+    {
+        std::cout<<"\nAt least one test failed\n";
+    }
 }
 
-bool runTests(bool (*func)(), int i)
+bool runTest(bool (*func)(), int i)
 {
     std::cout<<i<<": ";
     if(!func())
     {
-        std::cout << "Tests Failed\n";
+        std::cout << "Test Failed.\n";
         return false;
     }
     else
     {
-        std::cout << "All Tests Passed!\n";
+        std::cout << "Test Passed!\n";
         return true;
     }
 }

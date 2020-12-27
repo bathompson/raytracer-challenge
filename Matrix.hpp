@@ -18,6 +18,13 @@ class Matrix
 		static Matrix Matrix3x3(double vals[3][3]);
 		static Matrix Matrix4x4(double vals[4][4]);
 		static Matrix Identity();
+		static Matrix Translate(double x, double y, double z);
+		static Matrix Scale(double x, double y, double z);
+		//r is in radians not degrees
+		static Matrix RotateX(double r);
+		static Matrix RotateY(double r);
+		static Matrix RotateZ(double r);
+		static Matrix Shear(double xy, double xz, double yx, double yz, double zx, double zy);
 
 		Matrix transpose();
 		double determinant();

@@ -210,3 +210,174 @@ bool matrixInverseTest()
     return result;
     
 }
+
+bool translationTest1()
+{
+    Matrix transform = Matrix::Translate(5,-3,2);
+    Tuple p = Tuple::Point(-3,4,5);
+
+    return transform*p == Tuple::Point(2,1,7);
+}
+
+bool translationTest2()
+{
+    Matrix transform = Matrix::Translate(5,-3,2);
+    Matrix inverse = transform.inverse();
+    Tuple p = Tuple::Point(-3,4,5);
+
+    return inverse*p == Tuple::Point(-8,7,3);
+}
+
+bool translateVectorTest()
+{
+    Matrix transform = Matrix::Translate(5,-3,2);
+    Tuple v = Tuple::Vector(-3,4,5);
+
+    return transform*v == v;
+}
+
+bool scaleTest1()
+{
+    Matrix transform = Matrix::Scale(2,3,4);
+    Tuple point = Tuple::Point(-4,6,8);
+
+    return transform*point == Tuple::Point(-8, 18, 32);
+}
+
+bool scaleTest2()
+{
+    Matrix transform = Matrix::Scale(2,3,4);
+    Tuple v = Tuple::Vector(-4,6,8);
+
+    return transform*v == Tuple::Vector(-8, 18, 32);
+}
+
+bool scaleTest3()
+{
+    Matrix transform = Matrix::Scale(2,3,4);
+    Matrix inv = transform.inverse();
+    Tuple v = Tuple::Vector(-4,6,8);
+
+    return inv*v == Tuple::Vector(-2,2,2);
+}
+
+bool reflectionTest()
+{
+    Matrix transform = Matrix::Scale(-1,1,1);
+    Tuple point = Tuple::Point(2,3,4);
+
+    return transform*point == Tuple::Point(-2,3,4);
+}
+
+bool xRotationTest()
+{
+    Tuple p = Tuple::Point(0,1,0);
+    Matrix halfQuarter = Matrix::RotateX(M_PI/4);
+    Matrix fullQuarter = Matrix::RotateX(M_PI/2);
+
+    return halfQuarter*p == Tuple::Point(0, std::sqrt(2)/2, std::sqrt(2)/2) && fullQuarter*p == Tuple::Point(0,0,1);
+}
+
+bool xInvRotationTest()
+{
+    Tuple p = Tuple::Point(0,1,0);
+    Matrix halfQuarter = Matrix::RotateX(M_PI/4);
+    Matrix inv = halfQuarter.inverse();
+
+    return inv*p == Tuple::Point(0, std::sqrt(2)/2, -std::sqrt(2)/2);
+}
+
+bool yRotationTest()
+{
+    Tuple p = Tuple::Point(0,0,1);
+    Matrix halfQuarter = Matrix::RotateY(M_PI/4);
+    Matrix fullQuarter = Matrix::RotateY(M_PI/2);
+
+    return halfQuarter*p == Tuple::Point(std::sqrt(2)/2, 0, std::sqrt(2)/2) && fullQuarter*p == Tuple::Point(1,0,0);
+}
+
+bool zRotationTest()
+{
+    Tuple p = Tuple::Point(0,1,0);
+    Matrix halfQuarter = Matrix::RotateZ(M_PI/4);
+    Matrix fullQuarter = Matrix::RotateZ(M_PI/2);
+
+    return halfQuarter*p == Tuple::Point(-std::sqrt(2)/2, std::sqrt(2)/2, 0) && fullQuarter*p == Tuple::Point(-1,0,0);
+}
+
+bool shearTest1()
+{
+    Matrix transform = Matrix::Shear(1,0,0,0,0,0);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(5,3,4);
+}
+
+bool shearTest2()
+{
+    Matrix transform = Matrix::Shear(0,1,0,0,0,0);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(6,3,4);
+}
+
+bool shearTest3()
+{
+    Matrix transform = Matrix::Shear(0,0,1,0,0,0);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(2,5,4);
+}
+
+bool shearTest4()
+{
+    Matrix transform = Matrix::Shear(0,0,0,1,0,0);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(2,7,4);
+}
+
+bool shearTest5()
+{
+    Matrix transform = Matrix::Shear(0,0,0,0,1,0);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(2,3,6);
+}
+
+bool shearTest6()
+{
+    Matrix transform = Matrix::Shear(0,0,0,0,0,1);
+    Tuple p = Tuple::Point(2,3,4);
+
+    return transform*p == Tuple::Point(2,3,7);
+}
+
+bool chainTransformTest1()
+{
+    Tuple p = Tuple::Point(1,0,1);
+    Matrix a = Matrix::RotateX(M_PI/2);
+    Matrix b = Matrix::Scale(5,5,5);
+    Matrix c = Matrix::Translate(10,5,7);
+    bool result = true;
+    Tuple p2 = a*p;
+    result &=p2==Tuple::Point(1,-1,0);
+    Tuple p3 = b*p2;
+    result &= p3 == Tuple::Point(5,-5,0);
+    Tuple p4 = c*p3;
+    result &= p4 == Tuple::Point(15,0,7);
+
+    return result;
+}
+
+bool chainTransformTest2()
+{
+    Tuple p = Tuple::Point(1,0,1);
+    Matrix a = Matrix::RotateX(M_PI/2);
+    Matrix b = Matrix::Scale(5,5,5);
+    Matrix c = Matrix::Translate(10,5,7);
+
+    Matrix t = c*b*a;
+
+    return t*p == Tuple::Point(15,0,7);
+}

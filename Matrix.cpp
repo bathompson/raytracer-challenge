@@ -1,6 +1,7 @@
 #include "Matrix.hpp"  
 #include "util.hpp"
 #include <stdexcept>
+#include <cmath>
 
 Matrix::Matrix(int m, int n, double *vals[])
 {
@@ -253,4 +254,60 @@ Matrix Matrix::inverse()
 
     return m;
 
+}
+
+Matrix Matrix::Translate(double x, double y, double z)
+{
+    double vals[4][4] = {1,0,0,x,
+                         0,1,0,y,
+                         0,0,1,z,
+                         0,0,0,1};
+
+    return Matrix::Matrix4x4(vals);
+}
+
+Matrix Matrix::Scale(double x, double y, double z)
+{
+    double vals[4][4] = {x,0,0,0,
+                         0,y,0,0,
+                         0,0,z,0,
+                         0,0,0,1};
+    return Matrix::Matrix4x4(vals);
+}
+
+Matrix Matrix::RotateX(double r)
+{
+    double vals[4][4]={1,0,0,0,
+                       0, std::cos(r), -std::sin(r), 0,
+                       0, std::sin(r), std::cos(r), 0,
+                       0,0,0,1};
+    
+    return Matrix::Matrix4x4(vals);
+}
+
+Matrix Matrix::RotateY(double r)
+{
+    double vals[4][4] ={std::cos(r), 0, std::sin(r), 0,
+                        0, 1, 0, 0,
+                        -std::sin(r), 0, std::cos(r), 0,
+                        0, 0, 0, 1};
+    return Matrix::Matrix4x4(vals);
+}
+
+Matrix Matrix::RotateZ(double r)
+{
+    double vals[4][4] ={std::cos(r), -std::sin(r), 0, 0,
+                        std::sin(r), std::cos(r), 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1};
+    return Matrix::Matrix4x4(vals);
+}
+
+Matrix Matrix::Shear(double xy, double xz, double yx, double yz, double zx, double zy)
+{
+    double vals[4][4] ={1, xy, xz, 0,
+                        yx, 1, yz, 0,
+                        zx, zy, 1, 0,
+                        0, 0, 0, 1};
+    return Matrix::Matrix4x4(vals);
 }
