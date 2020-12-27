@@ -5,7 +5,7 @@
 
 bool runTupleTest1()
 {
-    Tuple t1(1, 4.3, -4.2, 3.1);
+    Tuple t1(4.3, -4.2, 3.1, 1);
     if(t1.W() != 1)
     {
         std::cout << "W is not the expected value"<<std::endl;
@@ -47,7 +47,7 @@ bool runTupleTest1()
 
 bool runTupleTest2()
 {
-    Tuple t1(0, 4.3, -4.2, 3.1);
+    Tuple t1(4.3, -4.2, 3.1, 0);
     if(t1.W() != 0)
     {
         std::cout << "W is not the expected value"<<std::endl;
@@ -90,20 +90,20 @@ bool runTupleTest2()
 bool tuplePointTest()
 {
     Tuple p = Tuple::Point(4,-4,3);
-    return p == Tuple(1, 4, -4, 3);
+    return p == Tuple(4, -4, 3, 1);
 }
 
 bool tupleVectorTest()
 {
     Tuple p = Tuple::Vector(4, -4, 3);
-    return p == Tuple(0, 4, -4, 3);
+    return p == Tuple(4, -4, 3, 0);
 }
 
 bool tupleAddTest()
 {
-    Tuple a = Tuple(1, 3, -2, 5);
-    Tuple b = Tuple(0, -2, 3, 1);
-    return (a+b) == Tuple(1,1,1, 6);
+    Tuple a = Tuple(3, -2, 5, 1);
+    Tuple b = Tuple(-2, 3, 1, 0);
+    return (a+b) == Tuple(1,1, 6, 1);
 }
 
 bool tupleSubTest()
@@ -138,9 +138,9 @@ bool tupleNegateTest()
 
 bool tupleScalarMultTest()
 {
-    Tuple t = Tuple(1,-2,3,-4);
+    Tuple t = Tuple(-2,3,-4,1);
 
-    return (t*3.5) == Tuple(3.5, -7, 10.5, -14);
+    return (t*3.5) == Tuple(-7, 10.5, -14, 3.5);
 }
 
 bool tupleScalarMultFracTest()

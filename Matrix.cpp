@@ -116,11 +116,12 @@ Matrix Matrix::operator*(const Matrix& n) const
 
 Tuple Matrix::operator*(const Tuple& t) const
 {
-    double w = matrix[0][0]*t.W()+matrix[0][1]*t.X()+matrix[0][2]*t.Y()+matrix[0][3]*t.Z();
-    double x = matrix[1][0]*t.W()+matrix[1][1]*t.X()+matrix[1][2]*t.Y()+matrix[1][3]*t.Z();
-    double y = matrix[2][0]*t.W()+matrix[2][1]*t.X()+matrix[2][2]*t.Y()+matrix[2][3]*t.Z();
-    double z = matrix[3][0]*t.W()+matrix[3][1]*t.X()+matrix[3][2]*t.Y()+matrix[3][3]*t.Z();
-    return Tuple(w,x,y,z);
+    double x = matrix[0][0]*t.X()+matrix[0][1]*t.Y()+matrix[0][2]*t.Z()+matrix[0][3]*t.W();
+    double y = matrix[1][0]*t.X()+matrix[1][1]*t.Y()+matrix[1][2]*t.Z()+matrix[1][3]*t.W();
+    double z = matrix[2][0]*t.X()+matrix[2][1]*t.Y()+matrix[2][2]*t.Z()+matrix[2][3]*t.W();
+    double w = matrix[3][0]*t.X()+matrix[3][1]*t.Y()+matrix[3][2]*t.Z()+matrix[3][3]*t.W();
+    
+    return Tuple(x,y,z,w);
 }
 
 Matrix Matrix::Identity()

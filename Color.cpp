@@ -5,7 +5,7 @@ Color::Color():Tuple()
 
 }
 
-Color::Color(double red, double green, double blue):Tuple(0,red,green,blue)
+Color::Color(double red, double green, double blue):Tuple(red,green,blue,0)
 {
 
 }

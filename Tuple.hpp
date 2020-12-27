@@ -13,7 +13,7 @@ class Tuple
 
 		Tuple();
 		//w can differentiate between vectors and points, otherwise it can be used in any other way.
-		Tuple(double w, double x, double y, double z);
+		Tuple(double x, double y, double z, double w);
 		~Tuple();
 		static Tuple Point(double x, double y, double z);
 		static Tuple Vector(double x, double y, double z);

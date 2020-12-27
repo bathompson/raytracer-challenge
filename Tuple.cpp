@@ -3,13 +3,13 @@
 
 Tuple::Tuple()
 {
-    w = 0;
     x = 0;
     y = 0;
     z = 0;
+    w = 0;
 }
 
-Tuple::Tuple(double w, double x, double y, double z)
+Tuple::Tuple(double x, double y, double z, double w)
 {
     this->w = w;
     this->x = x;
@@ -54,12 +54,12 @@ double Tuple::Z() const
 
 Tuple Tuple::Point(double x, double y, double z)
 {
-    return Tuple(1, x, y, z);
+    return Tuple(x, y, z, 1);
 }
 
 Tuple Tuple::Vector(double x, double y, double z)
 {
-    return Tuple(0, x, y, z);
+    return Tuple(x, y, z, 0);
 }
 
 bool Tuple::operator==(const Tuple& t)
@@ -69,12 +69,12 @@ bool Tuple::operator==(const Tuple& t)
 
 Tuple Tuple::operator+(const Tuple& t) const
 {
-    return Tuple(W()+t.W(), X()+t.X(), Y()+t.Y(), Z()+t.Z());
+    return Tuple( X()+t.X(), Y()+t.Y(), Z()+t.Z(), W()+t.W());
 }
 
 Tuple Tuple::operator-() const
 {
-    return Tuple(-W(), -X(), -Y(), -Z());
+    return Tuple(-X(), -Y(), -Z(), -W());
 }
 
 Tuple Tuple::operator-(const Tuple& t) const
@@ -84,7 +84,7 @@ Tuple Tuple::operator-(const Tuple& t) const
 
 Tuple Tuple::operator*(const double t) const
 {
-    return Tuple(t*W(), t*X(), t*Y(), t*Z());
+    return Tuple(t*X(), t*Y(), t*Z(), t*W());
 }
 
 Tuple Tuple::operator/(const double t) const
