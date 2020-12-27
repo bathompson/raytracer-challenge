@@ -48,7 +48,7 @@ void makeClock()
 void batchAllTests()
 {
     bool success = true;
-    bool (*func[59])();
+    bool (*func[75])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -108,6 +108,22 @@ void batchAllTests()
     func[56] = chainTransformTest1;
     func[57] = chainTransformTest2;
     func[58] = rayCreateTest;
+    func[59] = rayPosTest;
+    func[60] = rayIntersectTest1;
+    func[61] = rayIntersectTest2;
+    func[62] = rayIntersectTest3;
+    func[63] = rayIntersectTest4;
+    func[64] = rayIntersectTest5;
+    func[65] = intersectStructTest;
+    func[66] = intersectAggregationTest;
+    func[67] = intersectionHitTest1;
+    func[68] = intersectionHitTest2;
+    func[69] = intersectionHitTest3;
+    func[70] = intersectionHitTest4;
+    func[71] = rayTransformTest1;
+    func[72] = rayTransformTest2;
+    func[73] = sphereTransformSetTest1;
+    func[74] = sphereTransformTest2;
 
     int i = 0;
     for(auto& fun : func)

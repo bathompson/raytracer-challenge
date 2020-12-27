@@ -17,11 +17,42 @@ Matrix::Matrix(int m, int n, double *vals[])
     }
 }
 
+Matrix::Matrix(Matrix const& m)
+{
+    rows = m.rows;
+    cols = m.cols;
+    matrix = new double*[rows];
+    for(int i = 0; i<rows; i++)
+    {
+        matrix[i] = new double[cols];
+        for(int j = 0; j<cols; j++)
+        {
+            matrix[i][j] = m.matrix[i][j];
+        }
+    }
+}
+
 Matrix::~Matrix()
 {
     for(int i = 0; i<rows; i++)
         delete [] matrix[i];
     delete[] matrix;
+}
+
+Matrix& Matrix::operator=(Matrix const& m)
+{
+    rows = m.rows;
+    cols = m.cols;
+    matrix = new double*[rows];
+    for(int i = 0; i<rows; i++)
+    {
+        matrix[i] = new double[cols];
+        for(int j = 0; j<cols; j++)
+        {
+            matrix[i][j] = m.matrix[i][j];
+        }
+    }
+    return *this;
 }
 
 Matrix Matrix::Matrix2x2(double vals[2][2])

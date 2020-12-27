@@ -12,6 +12,7 @@ class Matrix
 	public:
 
 		Matrix(int m, int n, double **vals);
+		Matrix(const Matrix& other);
 		~Matrix();
 
 		static Matrix Matrix2x2(double vals[2][2]);
@@ -37,6 +38,7 @@ class Matrix
 		double* operator[](int i);
 		bool operator==(const Matrix& mat);
 		bool operator!=(const Matrix& mat);
+		Matrix& operator=(const Matrix& other);
 
 		//ONLY USE THESE WITH 4x4!!!
 		Matrix operator*(const Matrix& mat) const;
