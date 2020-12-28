@@ -1,4 +1,4 @@
-#include "Sphere.hpp"  
+#include "Sphere.hpp"
 
 Sphere::Sphere(long id):Shape(id)
 {
@@ -40,4 +40,22 @@ std::vector<std::shared_ptr<Intersection>> Sphere::intersect(Ray& r)
     intersectVals.push_back(std::make_shared<Intersection>(t1, this->shared_from_this()));
     intersectVals.push_back(std::make_shared<Intersection>(t2, this->shared_from_this()));
     return intersectVals;
+}
+
+Tuple Sphere::normalAt(const Tuple& p)
+{
+    Tuple objPoint = transform.inverse()*p;
+    Tuple objNormal = objPoint-Tuple::Point(0,0,0);
+    Tuple worldNormal = transform.inverse().transpose()*objNormal;
+    return Tuple::Vector(worldNormal.X(), worldNormal.Y(), worldNormal.Z()).normalize();
+}
+
+Material Sphere::getMaterial()
+{
+    return material;
+}
+
+void Sphere::setMaterial(const Material& m)
+{
+    material = m;
 }

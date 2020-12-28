@@ -7,7 +7,7 @@ class Shape
 	public:
 		Shape();
 		Shape(long id);
-		~Shape();
+		virtual ~Shape();
 
 		long Id();
 

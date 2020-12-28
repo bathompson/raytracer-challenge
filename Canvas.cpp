@@ -5,11 +5,11 @@ Canvas::Canvas(int width, int height)
 {
     this->width = width;
     this->height = height;
-    canvas = new Color*[height];
-    for(int i =0; i<height; i++)
+    canvas = new Color*[width];
+    for(int i =0; i<width; i++)
     {
-        canvas[i] = new Color[width];
-        for(int j =0; j<width; j++)
+        canvas[i] = new Color[height];
+        for(int j =0; j<height; j++)
         {
             canvas[i][j] = Color();
         }
@@ -19,7 +19,7 @@ Canvas::Canvas(int width, int height)
 
 Canvas::~Canvas()
 {
-    for(int i = 0; i < height; i++)
+    for(int i = 0; i < width; i++)
     {
         delete[] canvas[i];
     }
@@ -49,9 +49,9 @@ void Canvas::save(std::string filename)
 
     img<<"P3\n"<<width<<' '<<height<<'\n'<<255<<'\n';
     //Print only one set of colors to a line since 
-    for(int i = 0; i<height; i++)
+    for(int i = 0; i<width; i++)
     {
-        for(int j = 0; j<width; j++)
+        for(int j = 0; j<height; j++)
         {
             Color cur = canvas[i][j];
             img<<std::max(0, std::min(static_cast<int>(std::round(cur.Red()*255)), 255))<<' '<<std::max(0, std::min(static_cast<int>(std::round(cur.Green()*255)), 255))<<' '<<std::max(0, std::min(static_cast<int>(std::round(cur.Blue()*255)), 255))<<'\n';

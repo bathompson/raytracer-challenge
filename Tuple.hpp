@@ -26,6 +26,7 @@ class Tuple
 		Tuple normalize();
 		double dot(const Tuple& t);
 		Tuple cross(const Tuple& t);
+		Tuple reflect(const Tuple& normal);
 
 		double W() const;
 		double X() const;

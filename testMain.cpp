@@ -4,6 +4,8 @@
 #include "tests/canvasTest.hpp"
 #include "tests/matrixTests.hpp"
 #include "tests/rayTest.hpp"
+#include "tests/shadingTests.hpp"
+#include "PointLight.hpp"
 
 typedef struct
 {
@@ -21,12 +23,58 @@ bool runTest(bool (*func)(), int i);
 void batchAllTests();
 void makeClock();
 void makeUnshadedSphere();
+void makeShadedSphere();
 projectile tick(environment&, projectile&);
 
 int main()
 {
     batchAllTests();
-    makeUnshadedSphere();
+    makeShadedSphere();
+}
+
+void makeShadedSphere()
+{
+    Tuple rayOrigin = Tuple::Point(0,0,-5);
+    double wall_z = 10;
+    double wall_size = 7;
+    int canvas_pixels = 100;
+    double pixel_size = wall_size/canvas_pixels;
+    double half = wall_size/2.0;
+    Canvas canvas = Canvas(canvas_pixels, canvas_pixels);
+    Color color = Color(1,0,0);
+    auto s = Sphere::MakeSphere(0);
+    Material mat = Material();
+    Matrix m = Matrix::Translate(.5,.5,0);
+    mat.color = Color(1,0.2,1);
+    mat.diffuse = .7;
+    s->setMaterial(mat);
+    //s->setTransform(m);
+    Tuple lightPosition = Tuple::Point(-10, 10,-10);
+    Color lightColor = Color(1,1,1);
+    PointLight l = PointLight(lightPosition, lightColor);
+
+    for(int y = 0; y<canvas_pixels; y++)
+    {
+        double worldY = half-pixel_size*y;
+        for(int x = 0; x < canvas_pixels; x++)
+        {
+            double worldX = pixel_size*x-half;
+            Tuple pos = Tuple::Point(worldX, worldY, wall_z);
+            Ray r = Ray(rayOrigin, (pos-rayOrigin).normalize());
+            auto xs = s->intersect(r);
+            auto hit = Intersection::hit(xs);
+            if(hit != NULL)
+            {
+                Tuple point = r.position(hit->T());
+                std::shared_ptr<Sphere> sphere = std::dynamic_pointer_cast<Sphere>(hit->Object());
+                Tuple normal = sphere->normalAt(point);
+                Tuple eye = -r.Direction();
+                Color c =sphere->getMaterial().lighting(l, point, eye, normal);
+                canvas[x][y] = c;
+            }
+        }
+    }
+    canvas.save("shaded.ppm");
 }
 
 void makeUnshadedSphere()
@@ -81,7 +129,7 @@ void makeClock()
 void batchAllTests()
 {
     bool success = true;
-    bool (*func[77])();
+    bool (*func[95])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -159,6 +207,24 @@ void batchAllTests()
     func[74] = sphereTransformTest2;
     func[75] = sphereTransformIntersectionTest1;
     func[76] = sphereTransformIntersectionTest2;
+    func[77] = normalTest1;
+    func[78] = normalTest2;
+    func[79] = normalTest3;
+    func[80] = normalTest4;
+    func[81] = normalizedNormalTest;
+    func[82] = transformNormalTest1;
+    func[83] = transformNormalTest2;
+    func[84] = vectorReflectionTest1;
+    func[85] = vectorReflectionTest2;
+    func[86] = lightInstatiationTest;
+    func[87] = defaultMaterialTest;
+    func[88] = sphereDefaultMaterialTest;
+    func[89] = sphereAssignMaterialTest;
+    func[90] = lightingTest1;
+    func[91] = lightingTest2;
+    func[92] = lightingTest3;
+    func[93] = lightingTest4;
+    func[94] = lightingTest5;
 
     int i = 0;
     for(auto& fun : func)

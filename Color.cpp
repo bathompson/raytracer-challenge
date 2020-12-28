@@ -1,6 +1,6 @@
 #include "Color.hpp"  
 
-Color::Color():Tuple()
+Color::Color()
 {
 
 }
@@ -35,7 +35,12 @@ Color Color::operator*(const Color& c) const
     return Color(Red()*c.Red(), Green()*c.Green(), Blue()*c.Blue());
 }
 
-Tuple Color::operator*(const double t) const
+Color Color::operator*(const double t) const
 {
-    return ((Tuple)(*this)*t);
+    return Color(Red()*t, Green()*t, Blue()*t);
+}
+
+Color Color::operator+(const Color& c) const
+{
+    return Color(Red() + c.Red(), Green()+ c.Green(), Blue()+c.Blue());
 }

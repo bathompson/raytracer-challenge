@@ -18,6 +18,6 @@ class Color: public Tuple
 		double Blue() const;
 
 		Color operator*(const Color& c) const;
-		Tuple operator*(const double t) const;
-
+		Color operator*(const double t) const;
+		Color operator+(const Color& c) const;
 };

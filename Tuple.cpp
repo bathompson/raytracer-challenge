@@ -113,3 +113,8 @@ Tuple Tuple::cross(const Tuple& t)
                          Z()*t.X()- X()*t.Z(),
                          X()*t.Y()-Y()*t.X());
 }
+
+Tuple Tuple::reflect(const Tuple& normal)
+{
+    return *this - normal*2*this->dot(normal);
+}
