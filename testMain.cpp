@@ -24,31 +24,81 @@ void batchAllTests();
 void makeClock();
 void makeUnshadedSphere();
 void makeShadedSphere();
+void makeShadedSphereAA(int, int);
 projectile tick(environment&, projectile&);
 
 int main()
 {
     batchAllTests();
-    makeShadedSphere();
+    makeShadedSphereAA(200, 2);
 }
 
+void makeShadedSphereAA(int dim, int sample)
+{
+    Tuple rayOrigin = Tuple::Point(0,0,-5);
+    double wall_z = 10;
+    double wall_size = 7;
+    int canvas_pixels = dim*sample;
+    double pixel_size = wall_size/canvas_pixels;
+    double half = wall_size/2.0;
+    Canvas canvas = Canvas(dim, dim);
+    Color color = Color(1,0,0);
+    auto s = Sphere::MakeSphere(0);
+    Material mat = Material();
+    Matrix m = Matrix::RotateZ(M_PI/4)*Matrix::Scale(0.25,1,1);
+    mat.color = Color(1,0.2,1);
+    s->setMaterial(mat);
+    //s->setTransform(m);
+    Tuple lightPosition = Tuple::Point(-10, 10,-10);
+    Color lightColor = Color(1,1,1);
+    PointLight l = PointLight(lightPosition, lightColor);
+
+    for(int y = 0; y<canvas_pixels; y++)
+    {
+        double worldY = half-pixel_size*y;
+        for(int x = 0; x < canvas_pixels; x++)
+        {
+            double worldX = pixel_size*x-half;
+            Tuple pos = Tuple::Point(worldX, worldY, wall_z);
+            Ray r = Ray(rayOrigin, (pos-rayOrigin).normalize());
+            auto xs = s->intersect(r);
+            auto hit = Intersection::hit(xs);
+            if(hit != NULL)
+            {
+                Tuple point = r.position(hit->T());
+                std::shared_ptr<Sphere> sphere = std::dynamic_pointer_cast<Sphere>(hit->Object());
+                Tuple normal = sphere->normalAt(point);
+                Tuple eye = -r.Direction();
+                Color c =sphere->getMaterial().lighting(l, point, eye, normal);
+                canvas[x/sample][y/sample] = canvas[x/sample][y/sample]+c;
+            }
+        }
+    }
+    for(int i = 0; i<dim; i++)
+    {
+        for(int j = 0; j<dim; j++)
+        {
+            canvas[i][j] = canvas[i][j]*(1/std::pow(sample,2));
+        }
+    }
+    canvas.save("shadedAA.ppm");
+}
 void makeShadedSphere()
 {
     Tuple rayOrigin = Tuple::Point(0,0,-5);
     double wall_z = 10;
     double wall_size = 7;
-    int canvas_pixels = 100;
+    int canvas_pixels = 250;
     double pixel_size = wall_size/canvas_pixels;
     double half = wall_size/2.0;
     Canvas canvas = Canvas(canvas_pixels, canvas_pixels);
     Color color = Color(1,0,0);
     auto s = Sphere::MakeSphere(0);
     Material mat = Material();
-    Matrix m = Matrix::Translate(.5,.5,0);
+    Matrix m = Matrix::RotateZ(M_PI/4)*Matrix::Scale(0.25,1,1);
     mat.color = Color(1,0.2,1);
-    mat.diffuse = .7;
     s->setMaterial(mat);
-    //s->setTransform(m);
+    s->setTransform(m);
     Tuple lightPosition = Tuple::Point(-10, 10,-10);
     Color lightColor = Color(1,1,1);
     PointLight l = PointLight(lightPosition, lightColor);
