@@ -20,12 +20,45 @@ typedef struct
 bool runTest(bool (*func)(), int i);
 void batchAllTests();
 void makeClock();
+void makeUnshadedSphere();
 projectile tick(environment&, projectile&);
 
 int main()
 {
     batchAllTests();
-    makeClock();
+    makeUnshadedSphere();
+}
+
+void makeUnshadedSphere()
+{
+    Tuple rayOrigin = Tuple::Point(0,0,-5);
+    double wall_z = 10;
+    double wall_size = 7;
+    int canvas_pixels = 100;
+    double pixel_size = wall_size/canvas_pixels;
+    double half = wall_size/2.0;
+    Canvas canvas = Canvas(canvas_pixels, canvas_pixels);
+    Color color = Color(0.235, 0.588, 0.686);
+    auto s = Sphere::MakeSphere(0);
+    //Matrix m = Matrix::Shear(1,0,0,0,0,0)*Matrix::Scale(0.5,1,1);
+    //s->setTransform(m);
+        for(int y = 0; y<canvas_pixels; y++)
+        {
+            double worldY = pixel_size*y-half;
+            for(int x = 0; x < canvas_pixels; x++)
+            {
+                double worldX = pixel_size*x-half;
+                Tuple pos = Tuple::Point(worldX, worldY, wall_z);
+                Ray r = Ray(rayOrigin, (pos-rayOrigin).normalize());
+                auto xs = s->intersect(r);
+                auto hit = Intersection::hit(xs);
+                if(hit != NULL)
+                {
+                    canvas[y][x] = color;
+                }
+            }
+        }
+    canvas.save("unshaded.ppm");
 }
 
 void makeClock()
@@ -48,7 +81,7 @@ void makeClock()
 void batchAllTests()
 {
     bool success = true;
-    bool (*func[75])();
+    bool (*func[77])();
     func[0] = runTupleTest1;
     func[1] = runTupleTest2;
     func[2] = tuplePointTest;
@@ -124,6 +157,8 @@ void batchAllTests()
     func[72] = rayTransformTest2;
     func[73] = sphereTransformSetTest1;
     func[74] = sphereTransformTest2;
+    func[75] = sphereTransformIntersectionTest1;
+    func[76] = sphereTransformIntersectionTest2;
 
     int i = 0;
     for(auto& fun : func)

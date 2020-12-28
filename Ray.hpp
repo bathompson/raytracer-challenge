@@ -2,7 +2,6 @@
 #pragma once
 #include "util.hpp"
 #include "Tuple.hpp"
-#include "Sphere.hpp"
 #include "Matrix.hpp"
 #include <vector>
 
@@ -20,7 +19,6 @@ class Ray
 		Tuple Direction();
 
 		Tuple position(double t);
-		std::vector<double> intersect(Sphere& s);
 		Ray transform(const Matrix& m);
 
 };

@@ -24,25 +24,25 @@ bool rayPosTest()
 bool rayIntersectTest1()
 {
     Ray r = Ray(Tuple::Point(0,0,-5), Tuple::Vector(0,0,1));
-    Sphere s = Sphere(0);
-    std::vector<double> xs = r.intersect(s);
-    return xs.size() == 2 && dlb_eq(xs[0], 4, EPSILON) && dlb_eq(xs[1], 6, EPSILON);
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(0);
+    auto xs = s->intersect(r);
+    return xs.size() == 2 && dlb_eq(xs[0]->T(), 4, EPSILON) && dlb_eq(xs[1]->T(), 6, EPSILON);
 }
 
 bool rayIntersectTest2()
 {
     Ray r = Ray(Tuple::Point(0,1,-5), Tuple::Vector(0,0,1));
-    Sphere s = Sphere(1);
-    auto xs = r.intersect(s);
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(1);
+    auto xs = s->intersect(r);
 
-    return xs.size() == 2 && xs[0] == 5 && xs[1] == 5;
+    return xs.size() == 2 && xs[0]->T() == 5 && xs[1]->T() == 5;
 }
 
 bool rayIntersectTest3()
 {
     Ray r = Ray(Tuple::Point(0,2,5), Tuple::Vector(0,0,1));
-    Sphere s = Sphere(2);
-    auto xs = r.intersect(s);
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(2);
+    auto xs = s->intersect(r);
 
     return xs.size() == 0;
 }
@@ -50,20 +50,20 @@ bool rayIntersectTest3()
 bool rayIntersectTest4()
 {
     Ray r = Ray(Tuple::Point(0,0,0), Tuple::Vector(0,0,1));
-    Sphere s = Sphere(3);
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(3);
 
-    auto xs = r.intersect(s);
+    auto xs = s->intersect(r);
 
-    return xs.size() ==2 && xs[0] == -1 && xs[1] == 1;
+    return xs.size() ==2 && xs[0]->T() == -1 && xs[1]->T() == 1;
 }
 
 bool rayIntersectTest5()
 {
     Ray r = Ray(Tuple::Point(0,0,5), Tuple::Vector(0,0,1));
-    Sphere s = Sphere(4);
-    auto xs = r.intersect(s);
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(4);
+    auto xs = s->intersect(r);
 
-    return xs.size() == 2 && xs[0] == -6 && xs[1] == -4;
+    return xs.size() == 2 && xs[0]->T() == -6 && xs[1]->T() == -4;
 }
 
 bool intersectStructTest()
@@ -161,4 +161,25 @@ bool sphereTransformTest2()
     s.setTransform(t);
 
     return s.Transform() == t;
+}
+
+bool sphereTransformIntersectionTest1()
+{
+    Ray r = Ray(Tuple::Point(0,0,-5), Tuple::Vector(0,0,1));
+    std::shared_ptr<Sphere> s = std::make_shared<Sphere>(12);
+    s->setTransform(Matrix::Scale(2,2,2));
+    auto xs = s->intersect(r);
+
+    return xs.size() == 2 && dlb_eq(xs[0]->T(), 3, EPSILON) && dlb_eq(xs[1]->T(), 7, EPSILON);
+}
+
+bool sphereTransformIntersectionTest2()
+{
+    auto s = Sphere::MakeSphere(13);
+    Ray r = Ray(Tuple::Point(0,0,-5),Tuple::Vector(0,0,1));
+    s->setTransform(Matrix::Translate(5,0,0));
+    auto xs = s->intersect(r);
+
+    return xs.size() == 0;
+
 }

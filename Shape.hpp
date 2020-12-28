@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-class Shape  
+class Shape
 {
 	private:
 	long id;
